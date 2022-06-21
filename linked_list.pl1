@@ -1,0 +1,77 @@
+ A10: PROC OPTIONS(MAIN);
+
+ dcl Head    PTR;
+ dcl Current PTR;
+ dcl Temp    PTR;
+ dcl NULL    BUILTIN;
+
+ dcl 1 Node      BASED,
+       2 Wert    FIXED BIN,
+       2 Naechst PTR;
+
+ /* Create the head note */
+ ALLOCATE Node set(HEAD);
+ Head -> Wert    = '';
+ Head -> Naechst = NULL;
+ Temp = Head;
+ call PUT_LIST;
+
+ Temp = CreateNode(1,Temp);
+ Temp = CreateNode(2,Temp);
+ Temp = CreateNode(3,Temp);
+ Temp = CreateNode(4,Temp);
+ Temp = Head;
+
+ /* Create further nodes */
+ CreateNode: procedure (Value,P) returns(pointer);
+ dcl Value FIXED BIN;
+ dcl P POINTER;
+ ALLOCATE Node set(Current);
+ Current  -> Wert    = Value;
+ Current  -> Naechst = NULL;
+ P -> Naechst = Current;
+ call PUT_LIST;
+ return (Current);
+ END CreateNode;
+
+ PUT SKIP LIST ( 'The elements in the list are:' );
+ DO WHILE (Temp ^= NULL);
+   PUT SKIP LIST (Temp  -> Wert);
+   Temp = Temp -> Naechst ;
+ END;
+
+ PUT_LIST:
+ PROCEDURE;
+ put skip list('Head:');
+ put list(Head);
+ put list(addr(Head));
+ put skip list('Head->Wert');
+ put list(Head->Wert);
+ put list(addr(Head->Wert));
+ put skip list('Head->Naechst:');
+ put list(Head->Naechst);
+ put list(addr(Head->Naechst));
+
+ put skip list('Temp:');
+ put list(Temp);
+ put list(addr(Temp));
+ put skip list('Temp->Wert');
+ put list(Temp->Wert);
+ put list(addr(Temp->Wert));
+ put skip list('Temp->Naechst:');
+ put list(Temp->Naechst);
+ put list(addr(Temp->Naechst));
+
+ put skip list('Current:');
+ put list(Current );
+ put list(addr(Current));
+ put skip list('Current->Wert:');
+ put list(Current->Wert);
+ put list(addr(Current->Wert));
+ put skip list('Naechst:');
+ put list(Current->Naechst);
+ put list(addr(Current->Naechst));
+ put skip list(' ');
+ END PUT_LIST;
+
+ END A10;
